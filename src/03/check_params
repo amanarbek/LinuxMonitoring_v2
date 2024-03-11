@@ -1,0 +1,20 @@
+check_params () {
+  STATUS=0
+  STDERR='/dev/stderr'
+  COUNT_PARAMS='1'
+  PARAMETR_1='^[1-3]$'
+
+  if [[ $# -ne $COUNT_PARAMS ]]; then
+  STATUS=1
+  echo "The script should run with 1 parameter!" > $STDERR
+  fi
+
+  if [[ ! $1 =~ $PARAMETR_1 ]]; then
+    STATUS=1
+    echo "The Parameter have a value of 1, 2 or 3!" > $STDERR
+  fi
+
+  if [[ $STATUS -eq 1 ]]; then
+    exit $STATUS
+  fi
+}

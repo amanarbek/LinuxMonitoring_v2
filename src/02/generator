@@ -1,0 +1,44 @@
+generator () {
+  SIZE=$(expr $2 : '.*')
+  arr=()
+  for ((i = 0; i < $SIZE; ++i)); do
+    if [[ $i == $SIZE-1 ]]; then
+      arr+=($SIZE-$i)
+    elif [[ ${2:$i:1} != ${2:$i+1:1} ]]; then
+      arr+=($i)
+    fi
+  done
+  size_arr=${#arr[@]}
+  ITEMS=()
+  UP=1
+  count=0
+  if [[ $SIZE -eq 5 ]]; then
+    ITEMS+=$2
+    ((--elem))
+  elif [[ $SIZE -eq 4 ]]; then
+    UP=1
+  elif [[ $SIZE -eq 3 ]]; then
+    UP=2
+  elif [[ $SIZE -eq 2 ]]; then
+    UP=3
+  elif [[ $SIZE -eq 1 ]]; then
+    UP=4
+  fi
+  for ((i = 0; i < $elem; ++i)); do
+    if [[ $count -eq $size_arr ]]; then
+      count=0
+      ((++UP))
+    fi
+    for ((a = 0; a < $SIZE+1; ++a)); do
+      if [[ ${arr[count]} == $a ]]; then
+        for ((b = 0; b < $UP; ++b)); do
+          name=$name${2:$a:1}
+        done
+      fi
+      name=$name${2:$a:1}
+    done
+    ITEMS+=($name)
+    name=''
+    ((++count))
+  done
+}

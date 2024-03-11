@@ -1,0 +1,54 @@
+check_params () {
+  STATUS=0
+  STDERR='/dev/stderr'
+  COUNT_PARAMS='6'
+  PARAMETR_1='^\/'
+  PARAMETR_2='^[0-9]+$'
+  PARAMETR_3='^[a-zA-Z]{1,7}$'
+  PARAMETR_5='^[a-zA-Z]{1,7}\.[a-zA-Z]{1,3}$'
+  PARAMETR_6='^[0-9]{1,3}kb$'
+
+  if [[ $# -ne $COUNT_PARAMS ]]; then
+  STATUS=1
+  echo "The script should run with 6 parameters! \
+  Example: 'main.sh /opt/test 4 az 5 az.az 3kb'" > $STDERR
+  fi
+
+  if [[ ! $1 =~ $PARAMETR_1 ]]; then
+    STATUS=1
+    echo "Parameter 1 is the absolute path! Starting \
+  from the root element '/'" > $STDERR
+  fi
+
+  if [[ ! $2 =~ $PARAMETR_2 ]]; then
+    STATUS=1
+    echo 'Parameter 2 most be the number!' > $STDERR
+  fi
+
+  if [[ ! $3 =~ $PARAMETR_3 ]]; then
+    STATUS=1
+    echo "Parameter 3 must consists of Latin letters \
+  (no more than 7 characters)." > $STDERR
+  fi
+
+  if [[ ! $4 =~ $PARAMETR_2 ]]; then
+    STATUS=1
+    echo 'Parameter 4 most be the number!' > $STDERR
+  fi
+
+  if [[ ! $5 =~ $PARAMETR_5 ]]; then
+    STATUS=1
+    echo "Parameter 5 must consists of Latin letters (no more \
+  than 7 characters for the name, no more than 3 characters \
+  for the extension). 'name.extension'" > $STDERR
+  fi
+
+  if [[ ! $6 =~ $PARAMETR_6 ]] || [[ ${6//[^0-9]/} -gt 100 ]]; then
+    STATUS=1
+    echo 'Parameter 6 - file size (in kilobytes, but not more than 100).' > $STDERR
+  fi
+
+  if [[ $STATUS -eq 1 ]]; then
+    exit $STATUS
+  fi
+}
